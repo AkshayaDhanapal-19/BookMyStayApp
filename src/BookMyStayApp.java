@@ -1,48 +1,61 @@
-class SearchService {
-    private Inventory inventory;
-    private Map<String, Room> rooms;
+class Reservation {
+    private String guestName;
+    private String roomType;
 
-    public SearchService(Inventory inventory, Map<String, Room> rooms) {
-        this.inventory = inventory;
-        this.rooms = rooms;
+    public Reservation(String guestName, String roomType) {
+        this.guestName = guestName;
+        this.roomType = roomType;
     }
 
-    // Read-only search
-    public void searchRooms() {
-        System.out.println("\n--- Available Rooms ---");
+    public String getGuestName() {
+        return guestName;
+    }
 
-        for (String type : inventory.getRoomTypes()) {
-            int available = inventory.getAvailability(type);
+    public String getRoomType() {
+        return roomType;
+    }
 
-            if (available > 0 && rooms.containsKey(type)) {
-                Room room = rooms.get(type);
+    public void display() {
+        System.out.println("Guest: " + guestName + " | Room Type: " + roomType);
+    }
+}
 
-                room.displayDetails();
-                System.out.println("Available: " + available);
-                System.out.println("----------------------");
-            }
+// Booking Request Queue (FIFO)
+class BookingRequestQueue {
+    private Queue<Reservation> queue;
+
+    public BookingRequestQueue() {
+        queue = new LinkedList<>();
+    }
+
+    // Add request (enqueue)
+    public void addRequest(Reservation reservation) {
+        queue.add(reservation);
+        System.out.println("Request Added: " + reservation.getGuestName());
+    }
+
+    // View all requests (read-only)
+    public void showRequests() {
+        System.out.println("\n--- Booking Request Queue (FIFO) ---");
+
+        for (Reservation r : queue) {
+            r.display();
         }
     }
 }
 public class BookMyStayApp {
     public static void main(String[] args) {
 
-        // Assuming you already have these initialized
-        Inventory inventory = new Inventory();
-        Map<String, Room> roomMap = new HashMap<>();
+        BookingRequestQueue requestQueue = new BookingRequestQueue();
 
-        // Example data (remove if already present in your code)
-        inventory.addRoom("Single", 5);
-        inventory.addRoom("Double", 0);
-        inventory.addRoom("Suite", 2);
+        // Guest requests (arrival order preserved)
+        requestQueue.addRequest(new Reservation("Alice", "Single"));
+        requestQueue.addRequest(new Reservation("Bob", "Suite"));
+        requestQueue.addRequest(new Reservation("Charlie", "Single"));
 
-        roomMap.put("Single", new Room("Single", 2000, Arrays.asList("WiFi", "AC")));
-        roomMap.put("Double", new Room("Double", 3500, Arrays.asList("WiFi", "AC", "TV")));
-        roomMap.put("Suite", new Room("Suite", 6000, Arrays.asList("WiFi", "AC", "TV", "Mini Bar")));
-
-        // -------- UC4: Room Search --------
-        SearchService searchService = new SearchService(inventory, roomMap);
-        searchService.searchRooms();
+        // Display queue (FIFO order)
+        requestQueue.showRequests();
     }
-
 }
+
+
