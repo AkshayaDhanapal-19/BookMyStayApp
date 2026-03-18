@@ -1,13 +1,23 @@
 public class BookMyStayApp {
     public static void main(String[] args) {
 
-        // UC1 - Welcome Message
-        System.out.println("====================================");
-        System.out.println("   Welcome to Book My Stay App");
-        System.out.println("   Hotel Booking System v1.0");
-        System.out.println("====================================");
-
-        System.out.println("Application Started Successfully!");
+        checkPalindrome();
     }
+
+    // UC2 - Hardcoded Palindrome
+    static void checkPalindrome() {
+
+        String str = "madam"; // hardcoded input
+        String reversed = new StringBuilder(str).reverse().toString();
+
+        System.out.println("Checking Palindrome for: " + str);
+
+        if (str.equals(reversed)) {
+            System.out.println("Result: Palindrome");
+        } else {
+            System.out.println("Result: Not Palindrome");
+        }
+    }
+
 }
-}
+
